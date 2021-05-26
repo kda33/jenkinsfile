@@ -6,6 +6,17 @@ stages {
         sleep(time: 10, unit: "SECONDS")
       }
     }
+    
+    stage("Quality gate") {
+      steps {
+        script {
+        def qualitygate = waitForQualityGate()
+          if (qualitygate.status != "OK") {
+           waitForQualityGate abortPipeline: true
+          }
+      }
+      }
+    }
   
   stage('Run tests') {
       steps {
