@@ -37,3 +37,24 @@ stages {
       }
     }
 }
+_________________________________
+
+def autoCancelled = false
+
+try {
+  stage('checkout') {
+    ...
+    if (your condition) {
+      autoCancelled = true
+      error('Aborting the build.')
+    }
+  }
+} catch (e) {
+  if (autoCancelled) {
+    currentBuild.result = 'SUCCESS'
+    // return here instead of throwing error to keep the build "green"
+    return
+  }
+  // normal error handling
+  throw e
+}
