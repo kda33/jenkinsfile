@@ -58,3 +58,14 @@ try {
   // normal error handling
   throw e
 }
+__________________________________
+
+stage('Set HASHTAG = git sha256') {
+        steps { node('master') {
+            script {
+                // Set environment variable git hash first 6 numbers
+                HASHTAG= sh( returnStdout: true, script: 'git log -1 --pretty=%h').trim()
+            }
+         }
+        }
+    }
